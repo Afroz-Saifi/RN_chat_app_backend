@@ -8,6 +8,7 @@ const path=require('path')
 const otpverify=require("../middleware/otp.middleware");
 const { UserOTP } = require('../models/otp.model');
 const { UserModel } = require('../models/user.model');
+const { BlacklistingModel } = require('../models/blacklist.model');
 
 userRoute.post("/register",async(req,res)=>{
     const {email,password,name }=req.body;
@@ -117,5 +118,13 @@ function sendOTPforverification(email,otp){
     })
 }
 
+
+userRoute.get("/logout/:token",async (req,res)=>{
+    let {token}=req.params
+   
+    let blacklisttoken=await new BlacklistingModel({btoken:token});
+    blacklisttoken.save();
+    res.status(200).send({msg:"you are logedout!"})
+});
 
 module.exports={userRoute}

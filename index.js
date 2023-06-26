@@ -3,9 +3,10 @@ const cors=require("cors");
 const { connection } = require('./config/db');
 const { userRoute } = require('./routes/user.route');
 const { Chat } = require('./models/chat.model');
+const { authentication } = require('./middleware/user.authentication');
 const app=express();
 app.use(express.json());
-// ko
+
 app.use(cors())
 require("dotenv").config();
 
@@ -20,6 +21,14 @@ app.get('/',(req,res) => {
 })
 
 app.use("/user",userRoute)
+app.post("/chats", authentication, async (req, res) => {
+    try {
+        const data = await Chat.find()
+        res.json(data)
+    } catch (error) {
+        res.json({error: error.message})
+    }
+})
 // app.post("/msg", async (re, res) => {
 //     try {
 //         const data = new Chat({
