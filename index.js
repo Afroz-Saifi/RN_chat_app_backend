@@ -5,7 +5,7 @@ const { userRoute } = require('./routes/user.route');
 const { Chat } = require('./models/chat.model');
 const app=express();
 app.use(express.json());
-
+// ko
 app.use(cors())
 require("dotenv").config();
 
